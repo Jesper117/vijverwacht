@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap");
+
+* {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    --Primary: #27374D;
+    --Secondary: #526D82;
+    --Tertiary: #9DB2BF;
+    --Quaternary: #DDE6ED;
+}
+
+body {
+    font-family: "Ubuntu", sans-serif;
+
+    background-color: var(--Primary) !important;
+    color: var(--Quaternary) !important;
+}
+
+header {
+    background-color: var(--Secondary);
+    text-align: center;
+    padding: 1rem;
+}
+
+header img {
+    max-height: 50px;
+}
+
+main {
+    padding: 2rem;
+}
+
+.container {
+    display: flex;
+
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.video-library {
+    margin-top: 2rem;
+}
+
+.video-card {
+    background-color: var(--Secondary);
+
+    padding: 10px;
+    margin: 10px;
+
+    text-align: center;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    width: 300px;
+}
+
+.video-card label {
+    margin: 0;
+}
+
+.video-card img {
+    max-width: 200px;
+}
+
+.video-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 25px;
+
+    background-color: var(--Primary);
+}
+
+.information {
+    display: block;
+
+    margin: 25px auto;
+    padding: 10px;
+
+    width: 600px;
+
+    border-radius: 10px;
+
+    background-color: var(--Secondary);
+}
+
+.information label {
+    margin: 0;
+}
