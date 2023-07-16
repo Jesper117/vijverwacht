@@ -18,7 +18,7 @@ Deze hardware is in een 3D-geprinte behuizing geplaatst en wordt voorzien van st
 Bij elkaar kost dit ongeveer €60,-. <br>
 
 <h3>Software</h3>
-De Raspberry Pi draait op Raspbian Lite. Dit kan gedownload worden vanaf de [Raspberry Pi website](https://www.raspberrypi.org/downloads/raspbian/). <br>
+De Raspberry Pi draait op Raspbian Lite. Dit kan gedownload worden vanaf de Raspberry Pi website https://www.raspberrypi.org/downloads/raspbian . <br>
 Het script is geschreven in Python 3.7. <br>
 
 <h3>Installatie</h3>
