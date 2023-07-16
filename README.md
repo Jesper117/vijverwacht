@@ -2,7 +2,7 @@
 
 <h3>Beschrijving</h3>
 Vijverwacht is een project waar opnames van je vijver of tuin automatisch worden geüpload vanaf een Raspberry Pi. <br>
-De online versie is te zien op [vijverwacht.codecove.nl](https://vijverwacht.codecove.nl).
+De online versie is te zien op https://vijverwacht.codecove.nl.
 
 <h3>Hardware</h3>
 Om de opnames te maken wordt gebruik gemaakt van een Raspberry Pi Zero W met een Pi NoIR camera en PIR motion sensor. <br>
