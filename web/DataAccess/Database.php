@@ -9,6 +9,10 @@ class db
 
     public function __construct($dbhost = 'localhost', $dbuser = 'root', $dbpass = '', $dbname = 'vijverwacht', $charset = 'utf8')
     {
+        if ($this->connection) {
+            $this->connection->close();
+        }
+
         $this->connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
         if ($this->connection->connect_error) {
             $this->error('Failed to connect to MySQL - ' . $this->connection->connect_error);
@@ -18,9 +22,6 @@ class db
 
     public function query($query)
     {
-        if (!$this->query_closed) {
-            $this->query->close();
-        }
         if ($this->query = $this->connection->prepare($query)) {
             if (func_num_args() > 1) {
                 $x = func_get_args();
