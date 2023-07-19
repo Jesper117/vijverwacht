@@ -23,18 +23,18 @@ if ((isset($_GET["key"], $_GET["endpoint"])) && array_key_exists($_GET["endpoint
         call_user_func($Handler);
     } else {
         http_response_code(401);
-        echo "Invalid key.";
+        Respond(["error" => "Invalid key."]);
     }
 } else {
     if (!isset($_GET["key"])) {
         http_response_code(400);
-        echo "No key provided.";
+        Respond(["error" => "No key provided."]);
     } else if (!isset($_GET["endpoint"])) {
         http_response_code(400);
-        echo "No endpoint provided.";
+        Respond(["error" => "No endpoint provided."]);
     } else {
         http_response_code(400);
-        echo "Invalid endpoint.";
+        Respond(["error" => "Invalid endpoint."]);
     }
 }
 
@@ -42,7 +42,14 @@ function Publish()
 {
     if (isset($_FILES["video"])) {
         $RecordingService = new RecordingService();
-        $RecordingService->Publish($_FILES["videos"]);
+        $Result = $RecordingService->Publish($_FILES["video"]);
+
+        if ($Result["success"]) {
+            Respond(["success" => "Video uploaded successfully."]);
+        } else {
+            http_response_code($Result["code"]);
+            Respond($Result);
+        }
     } else {
         http_response_code(400);
         Respond(["error" => "No videos were uploaded."]);

@@ -12,17 +12,27 @@ class RecordingAccess
 
     public function GetNextFileId()
     {
-        $Query = "SELECT MAX(FileId) FROM recordings";
-        $Result = $this->Database->ExecuteQuery($Query);
-        $Result = $Result->fetch_assoc();
-        $Result = $Result["MAX(FileId)"];
-        $Result++;
+        $Query = "SELECT id FROM recordings ORDER BY id DESC LIMIT 1";
+        $Result = $this->Database->Query($Query)->fetchAll();
 
-        return $Result;
+        if (count($Result) === 0) {
+            return 1;
+        } else {
+            return $Result[0]["id"] + 1;
+        }
     }
 
-    public function Publish($Recording)
+    public function Publish($Path, $Size, $Thumbnail_Base64)
     {
+        $Query = "INSERT INTO recordings (video_path, size, thumbnail_base64) VALUES ('$Path', '$Size', '$Thumbnail_Base64')";
+        $Insert = $this->Database->Query($Query);
+
+        if ($Insert->affectedRows() === 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
+
 ?>

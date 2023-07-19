@@ -19,28 +19,22 @@ class RecordingService
         return $Result;
     }
 
-private function GenerateThumbnail($Path)
+    private function GenerateThumbnail($Path, $TempPath)
     {
-        if (!shell_exec('command -v ffmpeg')) {
-            throw new Exception("FFmpeg not found. Make sure FFmpeg is installed on the server.");
-        }
+        $Name = uniqid();
+        $thumbnailPath = $TempPath . $Name .  ".jpg";
+        $Command = 'ffmpeg -i ' . $Path . ' -ss 00:00:00.001 -vframes 1 -vf "scale=200:-1" ' . $thumbnailPath;
 
-        $thumbnailPath = tempnam(sys_get_temp_dir(), 'thumbnail');
-        $thumbnailPath .= '.jpg';
+        exec($Command);
 
-        $ffmpegCmd = "ffmpeg -i " . escapeshellarg($Path) . " -ss 00:00:00.001 -vframes 1 -vf 'scale=-1:120' " . escapeshellarg($thumbnailPath) . " 2>&1";
-        exec($ffmpegCmd, $output, $returnCode);
+        $Thumbnail = file_get_contents($thumbnailPath);
+        $Thumbnail_Base64 = base64_encode($Thumbnail);
 
-        if ($returnCode !== 0) {
-            throw new Exception("Thumbnail generation failed. FFmpeg output: " . implode("\n", $output));
-        }
-
-        $thumbnailData = file_get_contents($thumbnailPath);
-        $base64Thumbnail = base64_encode($thumbnailData);
         unlink($thumbnailPath);
 
-        return $base64Thumbnail;
+        return $Thumbnail_Base64;
     }
+
 
     public function Publish($Recording)
     {
@@ -56,20 +50,26 @@ private function GenerateThumbnail($Path)
 
                 $NewName = $this->GetNextFileId() . ".mp4";
 
-                $NewPath = "../../videos/" . $NewName;
-                $AbsoluteNewPath = realpath($NewPath);
+                $AbsoluteNewPath = realpath($_SERVER["DOCUMENT_ROOT"]) . "\\vijverwacht\\videos\\" . $NewName;
+                $AbsoluteTempPath = realpath($_SERVER["DOCUMENT_ROOT"]) . "\\vijverwacht\\temp\\";
 
                 move_uploaded_file($Recording["tmp_name"], $AbsoluteNewPath);
-                $Thumbnail_Base64 = $this->GenerateThumbnail($AbsoluteNewPath);
+                $Thumbnail_Base64 = $this->GenerateThumbnail($AbsoluteNewPath, $AbsoluteTempPath);
 
-                $this->RecordingAccess->Publish($AbsoluteNewPath, $Size, $Thumbnail_Base64);
+                $DisplayPath = str_replace("\\", "/", $AbsoluteNewPath);
+
+                $Result = $this->RecordingAccess->Publish($DisplayPath, $Size, $Thumbnail_Base64);
+
+                if ($Result) {
+                    return ["success" => true, "code" => 200];
+                } else {
+                    return ["success" => false, "message" => "Recording could not be published.", "code" => 500];
+                }
             } else {
-                http_response_code(400);
-                Respond(["error" => "Invalid file type."]);
+                return ["success" => false, "message" => "Invalid recording file type.", "code" => 400];
             }
         } else {
-            http_response_code(400);
-            Respond(["error" => "Invalid recording."]);
+            return ["success" => false, "message" => "No recording file.", "code" => 400];
         }
     }
 }
