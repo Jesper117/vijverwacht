@@ -28,6 +28,21 @@ header img {
     max-height: 50px;
 }
 
+header .logout {
+    position: absolute;
+    left: 1rem;
+    top: 1.5rem;
+
+    color: var(--Quaternary);
+
+    transition: color 0.1s ease-in-out;
+}
+
+header .logout:hover {
+    color: var(--Tertiary);
+    text-decoration: none;
+}
+
 main {
     padding: 2rem;
 }
@@ -91,4 +106,46 @@ main {
 
 .information label {
     margin: 0;
+}
+
+.login {
+    text-align: center;
+}
+
+.login input {
+    display: block;
+
+    margin: 10px auto;
+    padding: 10px;
+
+    width: 300px;
+    height: 30px;
+
+    border-radius: 4px;
+
+    border: none;
+    outline: none;
+
+    background-color: var(--Quaternary);
+}
+
+.login button {
+    display: block;
+
+    margin: 10px auto;
+
+    width: 100px;
+    height: 40px;
+
+    border-radius: 4px;
+
+    border: none;
+    outline: none;
+
+    background-color: var(--Tertiary);
+    color: var(--Quaternary);
+}
+
+.login .error {
+    color: rgb(220, 50, 50);
 }

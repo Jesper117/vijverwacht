@@ -3,8 +3,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION["logged_in"])) {
-    header("Location: ../src/login.php");
+if (isset($_SESSION["logged_in"])) {
+    header("Location: ../src/library.php");
     exit();
 }
 ?>
@@ -25,18 +25,21 @@ if (!isset($_SESSION["logged_in"])) {
 
 <?php include_once("../src/header.php") ?>
 
-<div class="video-container">
-    <video controls autoplay loop muted>
-        <source src="content/placeholder.mp4" type="video/mp4">
-        Je browser heeft geen support voor de video tag.
-    </video>
-</div>
+<form class="information login" action="../Interface/Login.php" method="POST">
+    <h2>Inloggen</h2>
 
-<div class="information">
-    <h2>Opname #1</h2>
-    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-    <label>Lengte: 05:30</label>
-</div>
+    <label>Sleutel:</label>
+    <input name="key" type="password">
+
+    <?php
+    if (isset($_SESSION["login_callback"])) {
+        echo "<label class='error'>" . $_SESSION["login_callback"] . "</label>";
+        unset($_SESSION["login_callback"]);
+    }
+    ?>
+
+    <button type="submit">Login</button>
+</form>
 
 </body>
 </html>

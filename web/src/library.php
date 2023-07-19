@@ -1,3 +1,14 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION["logged_in"])) {
+    header("Location: ../src/login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -11,9 +22,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<header>
-    <img draggable="false" src="content/logo_large.png">
-</header>
+
+<?php include_once("../src/header.php") ?>
 
 <section class="video-library">
     <div class="container">

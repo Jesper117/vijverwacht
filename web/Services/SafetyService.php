@@ -1,6 +1,15 @@
 <?php
+require_once("../Services/LogService.php");
+
 class SafetyService
 {
+    private $LogService;
+
+    public function __construct()
+    {
+        $this->LogService = new LogService();
+    }
+
     public function StringContainsSQLInjections($String)
     {
         $pattern = '/\b(union|select|insert|update|delete|drop|truncate|create|alter)\b/i';
@@ -60,9 +69,13 @@ class SafetyService
         $Result = $this->VerifyStringIntegrity($String);
 
         if (!$Result) {
+            $this->LogService->Log("Attempt to inject SQL or XSS.");
+
             header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             exit();
         } else {
+            $this->LogService->Log("Passed StringCheck.");
+
             return true;
         }
     }
