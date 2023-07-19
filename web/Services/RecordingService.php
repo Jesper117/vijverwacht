@@ -22,7 +22,7 @@ class RecordingService
     private function GenerateThumbnail($Path, $TempPath)
     {
         $Name = uniqid();
-        $thumbnailPath = $TempPath . $Name .  ".jpg";
+        $thumbnailPath = $TempPath . $Name . ".jpg";
         $Command = 'ffmpeg -i ' . $Path . ' -ss 00:00:00.001 -vframes 1 -vf "scale=200:-1" ' . $thumbnailPath;
 
         exec($Command);
@@ -35,6 +35,72 @@ class RecordingService
         return $Thumbnail_Base64;
     }
 
+    function GetAllRecordings()
+    {
+        $Result = $this->RecordingAccess->GetAllRecordings();
+        $FormattedResult = array();
+
+        foreach ($Result as $Recording) {
+            $Time = $Recording["created_at"];
+            $Time = strtotime($Time);
+
+            $Recording["created_at"] = str_replace("-", "/", $Recording["created_at"]);
+            $Recording["created_at"] = date("d/m/Y", strtotime($Recording["created_at"]));
+            $Recording["created_at"] = $Recording["created_at"] . " &nbsp; " . date("H:i", $Time);
+
+            $Size = $Recording["size"];
+            if ($Size >= 1000000000) {
+                $Recording["size"] = round($Size / 1000000000, 2) . " GB";
+            } else if ($Size >= 1000000) {
+                $Recording["size"] = round($Size / 1000000, 2) . " MB";
+            } else if ($Size >= 1000) {
+                $Recording["size"] = round($Size / 1000, 2) . " KB";
+            } else {
+                $Recording["size"] = $Size . " B";
+            }
+
+            array_push($FormattedResult, $Recording);
+        }
+
+        return $FormattedResult;
+    }
+
+    function GetRecordingById($Id)
+    {
+        $this->SafetyService->StringCheck($Id);
+
+        $Recording = $this->RecordingAccess->GetRecordingById($Id);
+        $FormattedResult = array();
+
+        if ($Recording !== null && count($Recording) > 0) {
+            $Time = $Recording["created_at"];
+            $Time = strtotime($Time);
+
+            $Recording["created_at"] = str_replace("-", "/", $Recording["created_at"]);
+            $Recording["created_at"] = date("d/m/Y", strtotime($Recording["created_at"]));
+            $Recording["created_at"] = $Recording["created_at"] . " &nbsp; " . date("H:i", $Time);
+
+            $Size = $Recording["size"];
+            if ($Size >= 1000000000) {
+                $Recording["size"] = round($Size / 1000000000, 2) . " GB";
+            } else if ($Size >= 1000000) {
+                $Recording["size"] = round($Size / 1000000, 2) . " MB";
+            } else if ($Size >= 1000) {
+                $Recording["size"] = round($Size / 1000, 2) . " KB";
+            } else {
+                $Recording["size"] = $Size . " B";
+            }
+
+            $Recording["video_path"] = str_replace("C:/xampp/htdocs/vijverwacht/", "http://localhost/vijverwacht/", $Recording["video_path"]);
+            //$Recording["video_path"] = "content/abc.mp4";
+
+            $Recording["thumbnail_base64"] = "";
+
+            array_push($FormattedResult, $Recording);
+        }
+
+        return $FormattedResult[0];
+    }
 
     public function Publish($Recording)
     {

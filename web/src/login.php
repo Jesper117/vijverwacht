@@ -15,7 +15,7 @@ if (isset($_SESSION["logged_in"])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Opname #1 - Vijverwacht</title>
+    <title>Login - Vijverwacht</title>
     <link rel="icon" href="content/logo_small.png" type="image/x-icon"/>
     <link rel="stylesheet" href="css/style.css">
 

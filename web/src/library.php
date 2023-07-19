@@ -1,4 +1,6 @@
 <?php
+require_once("../Services/RecordingService.php");
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -27,83 +29,34 @@ if (!isset($_SESSION["logged_in"])) {
 
 <section class="video-library">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="video-card">
-                    <input id="recording_id" type="number" value="1" hidden readonly disabled>
+        <?php
+        $RecordingService = new RecordingService();
+        $Recordings = $RecordingService->GetAllRecordings();
 
-                    <img draggable="false" src="content/film.png">
-                    <h2>Opname #1</h2>
-                    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-                    <label>Lengte: 05:30</label>
-                </div>
-            </div>
-        </div>
+        if (count($Recordings) === 0) {
+            echo "<label>Er zijn nog geen opnames gemaakt.</label>";
+        } else {
+            foreach ($Recordings as $Recording) {
+                $Id = $Recording["id"];
+                $Path = $Recording["video_path"];
+                $Thumbnail_Base64 = $Recording["thumbnail_base64"];
+                $Size = $Recording["size"];
+                $Date = $Recording["created_at"];
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="video-card">
-                    <input id="recording_id" type="number" value="2" hidden readonly disabled>
-
-                    <img draggable="false" src="content/film.png">
-                    <h2>Opname #2</h2>
-                    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-                    <label>Lengte: 05:30</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="video-card">
-                    <input id="recording_id" type="number" value="3" hidden readonly disabled>
-
-                    <img draggable="false" src="content/film.png">
-                    <h2>Opname #3</h2>
-                    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-                    <label>Lengte: 05:30</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="video-card">
-                    <input id="recording_id" type="number" value="4" hidden readonly disabled>
-
-                    <img draggable="false" src="content/film.png">
-                    <h2>Opname #4</h2>
-                    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-                    <label>Lengte: 05:30</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="video-card">
-                    <input id="recording_id" type="number" value="5" hidden readonly disabled>
-
-                    <img draggable="false" src="content/film.png">
-                    <h2>Opname #5</h2>
-                    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-                    <label>Lengte: 05:30</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="video-card">
-                    <input id="recording_id" type="number" value="6" hidden readonly disabled>
-
-                    <img draggable="false" src="content/film.png">
-                    <h2>Opname #6</h2>
-                    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-                    <label>Lengte: 05:30</label>
-                </div>
-            </div>
-        </div>
+                echo "<div class='row'>";
+                echo "<div class='col-md-4'>";
+                echo "<div class='video-card'>";
+                echo "<input id='recording_id' type='number' value='$Id' hidden readonly disabled>";
+                echo "<img draggable='false' src='data:image/jpeg;base64,$Thumbnail_Base64'>";
+                echo "<h2>Opname #$Id</h2>";
+                echo "<label>Opgenomen: $Date</label> <br>";
+                echo "<label>Grootte: $Size</label>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+            }
+        }
+        ?>
     </div>
 </section>
 </body>

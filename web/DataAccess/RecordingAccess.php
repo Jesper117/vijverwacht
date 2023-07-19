@@ -22,6 +22,25 @@ class RecordingAccess
         }
     }
 
+    public function GetRecordingById($Id)
+    {
+        $Result = $this->Database->Query("SELECT * FROM recordings WHERE id = ?", array($Id))->fetchAll();
+
+        if (count($Result) === 0) {
+            return null;
+        } else {
+            return $Result[0];
+        }
+    }
+
+    public function GetAllRecordings()
+    {
+        $Query = "SELECT * FROM recordings";
+        $Result = $this->Database->Query($Query)->fetchAll();
+
+        return $Result;
+    }
+
     public function Publish($Path, $Size, $Thumbnail_Base64)
     {
         $Query = "INSERT INTO recordings (video_path, size, thumbnail_base64) VALUES ('$Path', '$Size', '$Thumbnail_Base64')";

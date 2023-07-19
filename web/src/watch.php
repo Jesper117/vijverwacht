@@ -1,10 +1,15 @@
 <?php
+require_once("../Services/RecordingService.php");
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
 if (!isset($_SESSION["logged_in"])) {
     header("Location: ../src/login.php");
+    exit();
+} else if (!isset($_GET["recording_id"])) {
+    header("Location: ../src/library.php");
     exit();
 }
 ?>
@@ -25,18 +30,27 @@ if (!isset($_SESSION["logged_in"])) {
 
 <?php include_once("../src/header.php") ?>
 
-<div class="video-container">
-    <video controls autoplay loop muted>
-        <source src="content/placeholder.mp4" type="video/mp4">
-        Je browser heeft geen support voor de video tag.
-    </video>
-</div>
+<?php
+$RecordingService = new RecordingService();
+$Recording = $RecordingService->GetRecordingById($_GET["recording_id"]);
 
-<div class="information">
-    <h2>Opname #1</h2>
-    <label>Opgenomen: 16/07/2023 &nbsp; 01:49</label> <br>
-    <label>Lengte: 05:30</label>
-</div>
+echo "<div class='video-container'>";
+echo "<video controls autoplay loop muted>";
+echo "<source src='" . $Recording["video_path"] . "' type='video/mp4'>";
+echo "Je browser heeft geen support voor de video tag.";
+echo "</video>";
+echo "</div>";
+
+$Id = $Recording["id"];
+$Size = $Recording["size"];
+$Date = $Recording["created_at"];
+
+echo "<div class='information'>";
+echo "<h2>Opname #$Id</h2>";
+echo "<label>Opgenomen: $Date</label> <br>";
+echo "<label>Grootte: $Size</label>";
+echo "</div>";
+?>
 
 </body>
 </html>
