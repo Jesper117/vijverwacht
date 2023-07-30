@@ -15,6 +15,8 @@ while True:
     with open("vijverwacht_temp.py", "r") as code:
         NewHash = hash(code.read())
 
+    print("Comparing new hash: " + str(NewHash) + " vs last hash: " + str(LastHash))
+
     if NewHash != LastHash:
         print("New version found, updating.")
 
@@ -22,7 +24,5 @@ while True:
         os.remove("vijverwacht.py")
         os.rename("vijverwacht_temp.py", "vijverwacht.py")
         os.system("python vijverwacht.py")
-
-    print("loop")
 
     time.sleep(1)
