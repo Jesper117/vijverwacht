@@ -111,6 +111,8 @@ class RecordingService
             $this->SafetyService->StringCheck($Recording["error"]);
             $this->SafetyService->StringCheck($Recording["size"]);
 
+            $Recording["type"] = explode(".", $Recording["name"])[1];
+
             if ($Recording["type"] === "video/mp4" || $Recording["type"] === "video/h264") {
                 $Size = $Recording["size"];
 
