@@ -111,10 +111,11 @@ class RecordingService
             $this->SafetyService->StringCheck($Recording["error"]);
             $this->SafetyService->StringCheck($Recording["size"]);
 
-            if ($Recording["type"] === "video/mp4") {
+            if ($Recording["type"] === "video/mp4" || $Recording["type"] === "video/h264") {
                 $Size = $Recording["size"];
 
-                $NewName = $this->GetNextFileId() . ".mp4";
+                $Extension = explode(".", $Recording["type"])[1];
+                $NewName = $this->GetNextFileId() . "." . $Extension;
 
                 $AbsoluteNewPath = realpath($_SERVER["DOCUMENT_ROOT"]) . "\\vijverwacht\\videos\\" . $NewName;
                 $AbsoluteTempPath = realpath($_SERVER["DOCUMENT_ROOT"]) . "\\vijverwacht\\temp\\";
