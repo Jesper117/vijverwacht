@@ -1,13 +1,8 @@
-# VIJVERWACHT CLIENT #
-# This script detects movement from the camera and sends the recorded video to the server, once the movement stops, with a cap of 2 minutes.
-# This script is being run on a Pi Zero with a NoIR camera module, OS is Raspbian light version (console only).
-
-import time
 import cv2
-import datetime
 import os
 import requests
-
+import platform
+import time
 
 KEY = "admin"
 
@@ -15,14 +10,8 @@ def PublishRecording(FileName):
     URL = "http://vijverwacht.codecove.nl/web/api/api.php?endpoint=publish&key=" + KEY
     files = {'video': open(FileName, 'rb')}
     r = requests.post(URL, files=files)
-
     print(r.text)
 
-
-# Record with opencv, because picamera is not supported by my OS.
-# Test record a 5 sec video
-
-# Record a 5 sec video with opencv
 def RecordVideo():
     # Open the camera
     cap = cv2.VideoCapture(0)
@@ -57,10 +46,11 @@ def RecordVideo():
         # Write the frame to the video file
         out.write(frame)
 
-        # Display the frame in a window (optional)
-        cv2.imshow('Recording...', frame)
-        if cv2.waitKey(1) & 0xFF == 27:  # Press 'Esc' to stop recording
-            break
+        # Display the frame in a window (only if DISPLAY environment variable is present)
+        if "DISPLAY" in os.environ:
+            cv2.imshow('Recording...', frame)
+            if cv2.waitKey(1) & 0xFF == 27:  # Press 'Esc' to stop recording
+                break
 
     print("Recording completed.")
 
@@ -68,8 +58,9 @@ def RecordVideo():
     cap.release()
     out.release()
 
-    # Close all OpenCV windows
-    cv2.destroyAllWindows()
+    # Close all OpenCV windows (only if DISPLAY environment variable is present)
+    if "DISPLAY" in os.environ:
+        cv2.destroyAllWindows()
 
     # Publish the video to the server
     PublishRecording(filename)
