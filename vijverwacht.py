@@ -49,4 +49,4 @@ def RecordVideo(Duration):
 
     PublishRecording(filename)
 
-RecordVideo()
+RecordVideo(7)
