@@ -3,7 +3,7 @@
 # This script is being run on a Pi Zero with a NoIR camera module, OS is Raspbian light version (console only).
 
 import time
-import picamera2
+import picamera
 import datetime
 import os
 import requests
