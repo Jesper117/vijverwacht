@@ -6,7 +6,7 @@ import time
 import threading
 
 KEY = "admin"
-DisplayAttached = True
+DisplayAttached = False
 
 Sensitivity = 0.3
 
