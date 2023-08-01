@@ -6,9 +6,8 @@ import time
 import threading
 
 KEY = "admin"
-DisplayAttached = False
 
-Sensitivity = 0.3
+Sensitivity = .5
 
 ActiveReports = 0
 LatestReportUNIX = 0
@@ -20,8 +19,12 @@ video_writer = None
 
 InitialRecordingIncrement = 20
 RepetitiveMotionIncrement = 5
-InactiveCap = 10
+InactiveCap = 15
 AbsoluteRecordingCap = 120
+
+DisplayAttached = False
+if platform.system() == "Windows":
+    DisplayAttached = True
 
 def PublishRecording(FileName):
     print("Publishing recording...")
@@ -72,6 +75,7 @@ def ReportMotion():
                 video_writer = cv2.VideoWriter("recording.mp4", cv2.VideoWriter_fourcc(*"mp4v"), 20, (640, 480))
 
                 print("Recording started.")
+
 
 def RecordingControlLoop():
     global RecordingCountdown
